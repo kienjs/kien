@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useEffect,
   useReducer,
 } from 'react';
 import { Sprite, useTick } from '@inlet/react-pixi';
@@ -27,6 +28,7 @@ export type Props = BaseUnitProps & {
   speed?: number;
   moveTo?: Point;
   debug?: boolean;
+  onChange?: (state: any) => void;
 };
 
 const reducer = (s: PositionState, a: PositionAction): PositionState => {
@@ -57,6 +59,7 @@ const Unit = (props: Props) => {
     position,
     lineStyle = [1, 0xff0000, 0.5],
     fillStyle = [0x00ff00, 0.1],
+    onChange,
   } = props;
 
   const [localPosition, update] = useReducer(reducer, merge(initialPosition, position));
@@ -83,7 +86,7 @@ const Unit = (props: Props) => {
       dy *= distance.value / 50;
     }
 
-    if (distance.value >= 1) {
+    if (distance.value >= 2) {
       return merge(localPosition, {
         x: current.x + dx,
         y: current.y + dy,
@@ -114,6 +117,12 @@ const Unit = (props: Props) => {
     }
   });
 
+  useEffect(() => {
+    if (typeof onChange === 'function') {
+      onChange(localPosition);
+    }
+  }, [onChange, localPosition]);
+
   return (
     <Sprite
       interactive
@@ -124,7 +133,6 @@ const Unit = (props: Props) => {
       // mouseover={(e) => console.log(id, e)}
       x={localPosition.x}
       y={localPosition.y}
-      // Because the image is vertical, so it is half of pi :D
       rotation={localPosition.rotation + Math.PI / 2}
     />
   );
