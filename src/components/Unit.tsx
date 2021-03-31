@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useReducer,
-  useRef,
 } from 'react';
 import { Sprite, useTick } from '@inlet/react-pixi';
 import { cloneDeep } from 'lodash';
@@ -12,9 +11,8 @@ import {
   lerp,
   memo,
   merge,
-  xy,
 } from '../lib/helpers';
-import { defaultOptions, initialPosition } from '../lib/constants';
+import { initialPosition } from '../lib/constants';
 
 import type {
   BaseUnitProps,
@@ -43,10 +41,11 @@ const reducer = (s: PositionState, a: PositionAction): PositionState => {
   }
 };
 
+// const debug = import.meta.env.DEV;
+
 const Unit = (props: Props) => {
   const {
     anchor = 0.5,
-    debug = import.meta.env.DEV,
     height = 10,
     id,
     width = 10,
@@ -66,12 +65,9 @@ const Unit = (props: Props) => {
   // const finalOptions = merge(defaultOptions, options);
 
   // FIXME: make types here
-  const body = useRef<any>();
-  const graphics = useRef<any>();
-
   // Guess the next point to move, we will try to use this to find best direction
   const predict = useCallback(() => {
-    const current = cloneDeep(body.current.position);
+    const current = cloneDeep(localPosition);
     const distance = getDistance(current, moveTo);
 
     if (distance === null) {
@@ -100,42 +96,16 @@ const Unit = (props: Props) => {
   }, [localPosition, speed, moveTo]);
 
   useTick((delta = 0) => {
-    const g = graphics.current;
-    const b = body.current;
-
-    if (debug) {
-      g.clear();
-
-      g.lineStyle(...lineStyle);
-      g.beginFill(...fillStyle);
-
-      g.moveTo(...xy(b.vertices[0]));
-
-      for (let j = 1; j < b.vertices.length; j += 1) {
-        g.lineTo(...xy(b.vertices[j]));
-      }
-
-      g.lineTo(...xy(b.vertices[0]));
-
-      if (/Circle/.test(b.label)) {
-        g.moveTo(b.position.x, b.position.y);
-        g.lineTo(
-          b.position.x + Math.cos(b.angle) * radius,
-          b.position.y + Math.sin(b.angle) * radius,
-        );
-      }
-    }
-
     if (!options.isStatic) {
       const next = predict();
 
       const microPosition = {
-        x: lerp(b.position.x, next.x, delta),
-        y: lerp(b.position.y, next.y, delta),
-        direction: angularLerp(b.angle, next.direction, delta),
+        x: lerp(localPosition.x, next.x, delta),
+        y: lerp(localPosition.y, next.y, delta),
+        direction: angularLerp(localPosition.direction, next.direction, delta),
       };
 
-      const step = merge(b.position, microPosition);
+      const step = merge(localPosition, microPosition);
 
       // interpolate between the origin and next position
       update({

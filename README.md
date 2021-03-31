@@ -1,6 +1,6 @@
-# Kien - Ants simulation game
+# Kien
 
-Build your empire on browser. [Demo](https://kienjs.vercel.app/)
+Build your ant empire on browser. [Demo](https://kienjs.vercel.app/)
 
 ## Installation
 
