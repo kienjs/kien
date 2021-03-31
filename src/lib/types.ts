@@ -19,7 +19,7 @@ export type MatterBodiesArgs = Point & {
 };
 
 export type PositionState = Point & {
-  direction: number;
+  rotation: number;
 };
 
 export type PositionAction = {
@@ -38,7 +38,6 @@ export type BaseUnitProps = {
   position: Partial<PositionState>;
   anchor?: Anchor;
   shape?: 'circle' | 'rectangle' | 'poligon' | 'trapezoid' | 'fromVertices';
-  rotation?: number;
   radius?: number;
   height?: number;
   width?: number;

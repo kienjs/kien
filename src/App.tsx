@@ -1,23 +1,21 @@
 import React, { useCallback, useState } from 'react';
 
 import {
+  Ant,
   Container,
-  Hero,
   Stage,
   TilingSprite,
   Tree,
 } from './components';
 import { stageOptions } from './lib/constants';
-
-const width = 1080;
-const height = 720;
+import { useWindowSize } from './lib/hooks';
 
 export default function App() {
+  const { width, height } = useWindowSize();
+
   const initHero1 = { x: 100, y: 300 };
-  const initHero2 = { x: 450, y: 250 };
   const [newPosition, setNewPosition] = useState(initHero1);
 
-  // TODO: Need to move this down to the Hero or Unit level
   const handleMoveTo = useCallback((e: any) => {
     setNewPosition({ ...e.data.global });
   }, []);
@@ -35,26 +33,19 @@ export default function App() {
         rightdown={handleMoveTo}
       >
         <TilingSprite
-          image="/sand.png"
+          image="/dirt.jpg"
           width={width}
           height={height}
           tilePosition={{ x: 0, y: 0 }}
         />
 
-        <Hero
-          id="hero1"
+        <Ant
+          id="ant1"
           position={initHero1}
           moveTo={newPosition}
-          skin="/bunny.png"
+          skin="/ant.png"
         />
 
-        <Hero
-          id="hero2"
-          position={initHero2}
-          skin="/bunny.png"
-        />
-
-        <Tree id="tree-1" position={{ x: 600, y: 100 }} />
       </Container>
     </Stage>
   );

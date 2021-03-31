@@ -3,7 +3,6 @@ import React, {
   useReducer,
 } from 'react';
 import { Sprite, useTick } from '@inlet/react-pixi';
-import { cloneDeep } from 'lodash';
 
 import {
   angularLerp,
@@ -67,7 +66,7 @@ const Unit = (props: Props) => {
   // FIXME: make types here
   // Guess the next point to move, we will try to use this to find best direction
   const predict = useCallback(() => {
-    const current = cloneDeep(localPosition);
+    const current = { ...localPosition };
     const distance = getDistance(current, moveTo);
 
     if (distance === null) {
@@ -85,10 +84,10 @@ const Unit = (props: Props) => {
     }
 
     if (distance.value >= 1) {
-      return merge(current, {
+      return merge(localPosition, {
         x: current.x + dx,
         y: current.y + dy,
-        direction,
+        rotation: direction,
       });
     }
 
@@ -102,7 +101,7 @@ const Unit = (props: Props) => {
       const microPosition = {
         x: lerp(localPosition.x, next.x, delta),
         y: lerp(localPosition.y, next.y, delta),
-        direction: angularLerp(localPosition.direction, next.direction, delta),
+        rotation: angularLerp(localPosition.rotation, next.rotation, delta),
       };
 
       const step = merge(localPosition, microPosition);
@@ -123,7 +122,10 @@ const Unit = (props: Props) => {
       width={width}
       anchor={anchor}
       // mouseover={(e) => console.log(id, e)}
-      {...localPosition}
+      x={localPosition.x}
+      y={localPosition.y}
+      // Because the image is vertical, so it is half of pi :D
+      rotation={localPosition.rotation + Math.PI / 2}
     />
   );
 };

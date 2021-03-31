@@ -3,7 +3,7 @@ import type { PositionState } from './types';
 export const stageOptions = {
   autoDensity: true,
   antialias: true,
-  backgroundColor: 0x333333,
+  backgroundColor: 0x222222,
   // powerPreference: 'high-performance', // detect dual graphic cards before use
 };
 
@@ -17,5 +17,5 @@ export const defaultOptions = {
 export const initialPosition: PositionState = {
   x: 50,
   y: 150,
-  direction: 0,
+  rotation: 0, // radians
 };
