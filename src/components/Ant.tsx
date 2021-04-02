@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { isEqual } from 'lodash';
 
 import { memo } from '../lib/helpers';
-import { usePrevious, useTick } from '../lib/hooks';
+import {
+  usePrevious,
+  useTick,
+  useWindowSize,
+} from '../lib/hooks';
 import type {
   BaseUnitProps,
   PositionState,
-  Point,
+  SignalPoint,
 } from '../lib/types';
 
 import Unit from './Unit';
@@ -16,7 +20,7 @@ export type HeroProps = BaseUnitProps & {
   position?: Partial<PositionState>;
   moveTo?: { x: number, y: number };
   skin: string;
-  onSignal: (p: Point) => void;
+  onSignal: (p: SignalPoint) => void;
 };
 
 const width = 20;
@@ -32,23 +36,41 @@ const Ant = (props: HeroProps) => {
     skin,
   } = props;
 
+  const { width: ww, height: wh } = useWindowSize();
+
   const [counter, setCounter] = useState<number>(0);
   const [currentPosition, setCurrentPosition] = useState<PositionState>();
 
   // If this way hurts performance, try to use ref
   const prevPosition = usePrevious(currentPosition);
 
+  const randomMove = useCallback(() => ({
+    x: Math.floor(Math.random() * (ww - 10)),
+    y: Math.floor(Math.random() * (wh - 10)),
+  }), [ww, wh]);
+
+  const [next, setNext] = useState(randomMove);
+
   useTick(() => {
-    if (counter >= 30) { // 60 is 1 second
+    if (counter % 10 === 0) {
+      setNext(randomMove());
+    }
+    if (counter >= 10) { // 60 is 1 second
       setCounter(0);
       if (currentPosition && !isEqual(prevPosition, currentPosition)) {
         const { x, y } = currentPosition;
-        onSignal({ x, y });
+
+        onSignal({ id, x, y });
       }
     } else {
       setCounter(counter + 1);
     }
   });
+
+  /* useTime(() => { */
+  /*   const { x, y } = currentPosition; */
+  /*   onSignal({ x, y }); */
+  /* }, 1, [currentPosition]); */
 
   return (
     <Unit
@@ -56,7 +78,7 @@ const Ant = (props: HeroProps) => {
       position={position}
       width={width}
       height={height}
-      moveTo={moveTo}
+      moveTo={next}
       anchor={[0.5, 0.6]}
       skin={skin}
       speed={3}

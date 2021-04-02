@@ -5,16 +5,18 @@ import { useTick } from '../lib/hooks';
 import type { Point } from '../lib/types';
 
 type Props = {
+  id: string;
   index: number;
   position: Point;
   type: 'HOME' | 'FOOD';
-  onDestroy: (index: number) => void;
+  onDestroy: (id: string, index: number) => void;
 };
 
 const TTL = 200;
 
 const Chemical = (props: Props) => {
   const {
+    id,
     index,
     position: { x, y },
     type,
@@ -32,9 +34,9 @@ const Chemical = (props: Props) => {
 
   useEffect(() => {
     if (time <= 0) {
-      onDestroy(index);
+      onDestroy(id, index);
     }
-  }, [index, time, onDestroy]);
+  }, [id, index, time, onDestroy]);
 
   const draw = useCallback((g: any) => {
     g.clear();

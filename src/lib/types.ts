@@ -3,9 +3,18 @@ export type Anchor = {
   y: number;
 } | number | [number, number];
 
+export type Count = {
+  title: string;
+  value: number;
+};
+
 export type Point = {
   x: number;
   y: number;
+};
+
+export type SignalPoint = Point & {
+  id: string;
 };
 
 export type MatterBodiesArgs = Point & {
