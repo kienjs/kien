@@ -50,7 +50,7 @@ export default function App() {
     setAnts(tmp);
   };
 
-  const [isReady, cancel, reset] = useTimeoutFn(generateNewAnt, 3000);
+  const [,, reset] = useTimeoutFn(generateNewAnt, 3000);
 
   useEffect(() => {
     reset();

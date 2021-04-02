@@ -18,7 +18,6 @@ import Unit from './Unit';
 export type HeroProps = BaseUnitProps & {
   id: string;
   position?: Partial<PositionState>;
-  moveTo?: { x: number, y: number };
   skin: string;
   onSignal: (p: SignalPoint) => void;
 };
@@ -30,7 +29,6 @@ const height = 30;
 const Ant = (props: HeroProps) => {
   const {
     id,
-    moveTo,
     position,
     onSignal,
     skin,
@@ -66,11 +64,6 @@ const Ant = (props: HeroProps) => {
       setCounter(counter + 1);
     }
   });
-
-  /* useTime(() => { */
-  /*   const { x, y } = currentPosition; */
-  /*   onSignal({ x, y }); */
-  /* }, 1, [currentPosition]); */
 
   return (
     <Unit

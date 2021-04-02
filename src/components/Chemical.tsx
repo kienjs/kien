@@ -41,7 +41,7 @@ const Chemical = (props: Props) => {
   const draw = useCallback((g: any) => {
     g.clear();
     g.lineStyle(0);
-    g.beginFill(type === 'HOME' ? 0xff000b : 0x00ff0b, time / TTL);
+    g.beginFill(type === 'HOME' ? 0x00ff0b : 0xff000b, time / TTL);
     g.drawCircle(x, y, 10);
     g.endFill();
   }, [x, y, time, type]);
