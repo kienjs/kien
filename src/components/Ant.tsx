@@ -6,6 +6,7 @@ import { usePrevious, useTick } from '../lib/hooks';
 import type {
   BaseUnitProps,
   PositionState,
+  Point,
 } from '../lib/types';
 
 import Unit from './Unit';
@@ -15,7 +16,7 @@ export type HeroProps = BaseUnitProps & {
   position?: Partial<PositionState>;
   moveTo?: { x: number, y: number };
   skin: string;
-  onSignal: (p: Partial<PositionState>) => void;
+  onSignal: (p: Point) => void;
 };
 
 const width = 20;
@@ -24,7 +25,11 @@ const height = 30;
 // TODO: The ant will have move ment and thing here
 const Ant = (props: HeroProps) => {
   const {
-    id, moveTo, position, onSignal, skin,
+    id,
+    moveTo,
+    position,
+    onSignal,
+    skin,
   } = props;
 
   const [counter, setCounter] = useState<number>(0);
@@ -36,8 +41,9 @@ const Ant = (props: HeroProps) => {
   useTick(() => {
     if (counter >= 60) { // 60fps :D
       setCounter(0);
-      if (!isEqual(prevPosition, currentPosition)) {
-        onSignal(currentPosition || {});
+      if (currentPosition && !isEqual(prevPosition, currentPosition)) {
+        const { x, y } = currentPosition;
+        onSignal({ x, y });
       }
     } else {
       setCounter(counter + 1);
