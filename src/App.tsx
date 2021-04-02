@@ -28,6 +28,12 @@ export default function App() {
     setChemicals(tmp);
   }, [chemicals, setChemicals]);
 
+  const handleDestroy = useCallback((index: number) => {
+    const tmp = [...chemicals];
+    tmp.splice(index, 1);
+    setChemicals(tmp);
+  }, [chemicals]);
+
   return (
     <Stage
       width={width}
@@ -49,9 +55,11 @@ export default function App() {
 
         {chemicals.length !== 0 && chemicals.map((o: any, i: number) => (
           <Chemical
+            index={i}
             key={`${o.x}-${o.y}`}
             position={o}
-            type={i % 2 === 0 ? 'HOME' : 'FOOD'}
+            type="HOME"
+            onDestroy={handleDestroy}
           />
         ))}
 

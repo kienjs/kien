@@ -39,7 +39,7 @@ const Ant = (props: HeroProps) => {
   const prevPosition = usePrevious(currentPosition);
 
   useTick(() => {
-    if (counter >= 60) { // 60fps :D
+    if (counter >= 30) { // 60 is 1 second
       setCounter(0);
       if (currentPosition && !isEqual(prevPosition, currentPosition)) {
         const { x, y } = currentPosition;
@@ -56,7 +56,7 @@ const Ant = (props: HeroProps) => {
       position={position}
       width={width}
       height={height}
-      moveTo={{ x: 800, y: 600 }}
+      moveTo={moveTo}
       anchor={[0.5, 0.6]}
       skin={skin}
       speed={3}
