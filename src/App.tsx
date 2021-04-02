@@ -6,7 +6,6 @@ import {
   Container,
   Stage,
   TilingSprite,
-  Tree,
 } from './components';
 import { stageOptions } from './lib/constants';
 import { useWindowSize } from './lib/hooks';

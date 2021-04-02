@@ -48,17 +48,12 @@ const Unit = (props: Props) => {
   const {
     anchor = 0.5,
     height = 10,
-    id,
     width = 10,
     moveTo,
-    radius = 10,
     speed = 6,
-    shape = 'rectangle',
     skin = '/warning.png',
     options = {},
     position,
-    lineStyle = [1, 0xff0000, 0.5],
-    fillStyle = [0x00ff00, 0.1],
     onChange,
   } = props;
 
